@@ -1,0 +1,25 @@
+{
+  "name": "my-team-profile-generator",
+  "version": "8.2.4",
+  "description": "Team Profile Generator",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abasit96/My-Team-Profile-Generator.git"
+  },
+  "author": "Abdul Basit",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/abasit96/My-Team-Profile-Generator/issues"
+  },
+  "homepage": "https://github.com/abasit96/My-Team-Profile-Generator#readme",
+  "dependencies": {
+    "jest": "^29.5.0"
+  }
+}
