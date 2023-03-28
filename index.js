@@ -7,6 +7,8 @@ const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const Manager = require("./lib/Manager");
 
+const { generateManager, generateIntern, generateEngineer } = require('./utilities');
+
 // Array for answers to questions
 const teamMembers = [];
 
@@ -151,15 +153,80 @@ async function start() {
 
     if (addMemberAns.addMember === 'Finish Team Creation') {
         console.log('Team Created', teamMembers);
+        generateFile(teamMembers);
     }
 }
 
-function createFile() {
+
+
+async function generateFile(team) {
+    const header = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>My Team</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body>
+      <div class="row">
+        <h1 class="text-center p-3 mb-2 bg-danger text-white">My Team</h1>
+      </div>
+      <div class="container" id="cards">
+        <div class="row" id="boxes" style="justify-content: center;">`
+        ;
+
+    const footer = `</div>
+    </div>
+    </div>
+  
+  </body>
+  
+  </html>`
+
+    let teamHTML = ``;
+
+    team.forEach((member) => {
+        role = member.getRole();
+
+        switch (role) {
+            case 'Manager':
+                teamHTML += generateManager(member);
+                break;
+            case 'Engineer':
+                teamHTML += generateEngineer(member);
+                break;
+            case 'Intern':
+                teamHTML += generateIntern(member);
+                break;
+        }
+    })
+
+    const html = header + teamHTML + footer;
+
+    let teamName = 'team';
+
+    await inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'teamName',
+                message: "What is the Team name?",
+            },
+        ])
+        .then(response => {
+            teamName = response.teamName
+        })
+
+    const OUTPUT_DIR = './output'
+    const OUTPUT_PATH = `./output/${teamName}.html`
     if (!fs.existsSync(OUTPUT_DIR)) {
         fs.mkdirSync(OUTPUT_DIR);
     } else {
-
-        fs.writeFileSync(outputPath, render(teamMembers), "UTF-8");
+        fs.writeFileSync(OUTPUT_PATH, html, "UTF-8");
         console.log("File created in the output folder");
     }
 
